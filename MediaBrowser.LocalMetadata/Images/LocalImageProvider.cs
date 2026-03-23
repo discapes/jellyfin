@@ -308,6 +308,20 @@ namespace MediaBrowser.LocalMetadata.Images
                         return;
                     }
                 }
+
+                // For music albums, fall back to any image file in the directory
+                if (item is MusicAlbum)
+                {
+                    var fallback = files.FirstOrDefault(f => !f.IsDirectory && f.Length > 0);
+                    if (fallback is not null)
+                    {
+                        images.Add(new LocalImageInfo
+                        {
+                            FileInfo = fallback,
+                            Type = ImageType.Primary
+                        });
+                    }
+                }
             }
         }
 
